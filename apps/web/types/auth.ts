@@ -1,14 +1,6 @@
-export type User = {
-  id: number;
-  userName: string;
-  fullName: string;
-  email: string;
-  phoneNumber?: string | null;
-  avatar?: string | null;
-  status: boolean;
-  roles: string[];
-  createdAt: string;
-};
+import type { IUser } from "@repo/types";
+
+export type User = IUser;
 
 export type LoginRequest = {
   login: string;

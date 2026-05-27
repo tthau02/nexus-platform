@@ -1,10 +1,9 @@
 ﻿FROM node:20-alpine AS base
-RUN npm i -g pnpm
 
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-RUN pnpm add -g turbo
+RUN npm install -g turbo
 COPY . .
 RUN turbo prune api --docker
 
@@ -14,13 +13,13 @@ WORKDIR /app
 
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN pnpm install
+COPY --from=builder /app/out/package-lock.json ./package-lock.json
+RUN npm install
 
 COPY --from=builder /app/out/full/ .
-RUN pnpm turbo run build --filter=api...
+RUN npx turbo run build --filter=api...
 
 FROM base AS runner
 WORKDIR /app
 COPY --from=installer /app/ .
-CMD pnpm start:prod --filter api
+CMD node dist/main

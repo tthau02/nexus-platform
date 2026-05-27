@@ -19,10 +19,10 @@ import { CreateOrEditUserPanel } from "./create-or-edit-user-panel";
 import { ApiError } from "@/lib/api-client";
 import { toast } from "sonner";
 import { useDeleteUserMutation, useUsersQuery } from "@/hooks/api";
-import type { User } from "@/types/auth";
+import type { IUser } from "@repo/types";
 import type { UserSearchParams } from "@/types/users";
 
-type UserRow = User & { detailPath: string };
+type UserRow = IUser & { detailPath: string };
 
 type UserActionPanelState = {
   open: boolean;

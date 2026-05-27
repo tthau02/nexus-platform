@@ -1,30 +1,26 @@
 import { apiFetch } from "@/lib/api-client";
-import type { User } from "@/types/auth";
-import type {
-  UserCreateOrEditRequest,
-  UserSearchParams,
-} from "@/types/users";
+import type { IUser, UserSearchParams, CreateUserRequest, UpdateUserRequest } from "@repo/types";
 
-const USERS_BASE = "/v1/api/Users";
+const USERS_BASE = "/api/v1/users";
 
 export const userService = {
-  search(params: UserSearchParams, token?: string): Promise<User[]> {
-    return apiFetch<User[]>(`${USERS_BASE}/search`, {
+  search(params: UserSearchParams, token?: string): Promise<IUser[]> {
+    return apiFetch<IUser[]>(`${USERS_BASE}/search`, {
       method: "GET",
-      query: params,
+      query: params as any,
       token,
     });
   },
 
-  getById(id: number, token?: string): Promise<User> {
-    return apiFetch<User>(`${USERS_BASE}/${id}`, {
+  getById(id: number, token?: string): Promise<IUser> {
+    return apiFetch<IUser>(`${USERS_BASE}/${id}`, {
       method: "GET",
       token,
     });
   },
 
-  create(payload: UserCreateOrEditRequest, token?: string): Promise<User> {
-    return apiFetch<User>(USERS_BASE, {
+  create(payload: CreateUserRequest, token?: string): Promise<IUser> {
+    return apiFetch<IUser>(USERS_BASE, {
       method: "POST",
       body: payload,
       token,
@@ -33,11 +29,11 @@ export const userService = {
 
   update(
     id: number,
-    payload: UserCreateOrEditRequest,
+    payload: UpdateUserRequest,
     token?: string,
-  ): Promise<User> {
-    return apiFetch<User>(`${USERS_BASE}/${id}`, {
-      method: "PUT",
+  ): Promise<IUser> {
+    return apiFetch<IUser>(`${USERS_BASE}/${id}`, {
+      method: "PATCH",
       body: payload,
       token,
     });
