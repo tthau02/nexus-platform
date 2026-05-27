@@ -1,24 +1,7 @@
-import type { User } from "@/types/auth";
+import type { UserSearchParams as SharedSearchParams, CreateUserRequest, UpdateUserRequest } from "@repo/types";
 
-export type UserSearchParams = {
-  page?: number;
-  pageSize?: number;
-  sortBy?: string;
-  isDesc?: boolean;
-  userName?: string;
-  fullName?: string;
-  status?: boolean;
-  roleId?: number;
-  roleName?: string;
-};
-
-export type UserCreateOrEditRequest = {
-  userName?: string;
-  fullName?: string;
-  email?: string;
+export type UserSearchParams = SharedSearchParams;
+export type UserCreateOrEditRequest = Omit<CreateUserRequest, "password"> & {
   password?: string;
-  phoneNumber?: string;
-  avatar?: string;
-  status?: boolean;
-  roleIds?: number[] | null;
 };
+export type UserUpdateRequest = UpdateUserRequest;

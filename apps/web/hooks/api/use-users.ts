@@ -9,13 +9,10 @@ import {
 
 import { queryKeys } from "@/hooks/api/query-keys";
 import { userService } from "@/services/user-service";
-import type { User } from "@/types/auth";
-import type {
-  UserCreateOrEditRequest,
-  UserSearchParams,
-} from "@/types/users";
+import type { CreateUserRequest, IUser } from "@repo/types";
+import type { UserCreateOrEditRequest, UserSearchParams } from "@/types/users";
 
-type UserListOptions = Omit<UseQueryOptions<User[]>, "queryKey" | "queryFn">;
+type UserListOptions = Omit<UseQueryOptions<IUser[]>, "queryKey" | "queryFn">;
 
 export function useUsersQuery(
   params: UserSearchParams,
@@ -42,7 +39,7 @@ export function useCreateUserMutation(token?: string) {
 
   return useMutation({
     mutationFn: (payload: UserCreateOrEditRequest) =>
-      userService.create(payload, token),
+      userService.create(payload as CreateUserRequest, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
     },
@@ -55,7 +52,7 @@ export function useUpdateUserMutation(token?: string) {
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: UserCreateOrEditRequest }) =>
       userService.update(id, payload, token),
-    onSuccess: (updatedUser: User) => {
+    onSuccess: (updatedUser: IUser) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
       queryClient.setQueryData(queryKeys.users.detail(updatedUser.id), updatedUser);
     },

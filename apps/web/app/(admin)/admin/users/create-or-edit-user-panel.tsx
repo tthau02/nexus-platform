@@ -12,11 +12,10 @@ import { ApiError } from "@/lib/api-client";
 import { toast } from "sonner";
 import { useCreateUserMutation, useUpdateUserMutation } from "@/hooks/api";
 import {
-  parseStaticRoleIdToPayload,
-  primaryRoleIdStringFromUser,
+  parseStaticRoleIdToPayload, primaryRoleIdStringFromUser,
   STATIC_USER_ROLE_SELECT_OPTIONS,
 } from "@/constants/static-user-roles";
-import type { User } from "@/types/auth";
+import type { IUser } from "@repo/types";
 import type { UserCreateOrEditRequest } from "@/types/users";
 
 export type UserFormDraft = {
@@ -43,7 +42,7 @@ const EMPTY_USER_DRAFT: UserFormDraft = {
   roleIds: "",
 };
 
-function toDraft(user: User | null): UserFormDraft {
+function toDraft(user: IUser | null): UserFormDraft {
   if (!user) return { ...EMPTY_USER_DRAFT };
   return {
     userName: user.userName,
@@ -161,10 +160,8 @@ export const USER_FORM_ITEMS: CommonFormItem<UserFormDraft>[] = [
 ];
 
 type CreateOrEditUserPanelProps = {
-  open: boolean;
-  mode: "add" | "edit";
-  editingUser: User | null;
-  token?: string;
+  open: boolean; mode: "add" | "edit";
+  editingUser: IUser | null; token?: string;
   onOpenChange: (open: boolean) => void;
 };
 
@@ -194,7 +191,7 @@ export function CreateOrEditUserPanel({
       phoneNumber: values.phoneNumber.trim() || undefined,
       avatar: values.avatar.trim() || undefined,
       status: values.status,
-      roleIds,
+      roleIds: roleIds ?? undefined,
     };
   };
 
